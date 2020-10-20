@@ -6,7 +6,7 @@ template<typename T>
 struct node
 {
 	T data;
-	node* next;
+	node* next = nullptr;
 };
 
 template<typename T>
@@ -41,8 +41,8 @@ private:
 template<typename T>
 myLinkedList<T>::myLinkedList() {
 	length = 0;
-	head = nullptr;
-	current = nullptr;
+	head = NULL;
+	current = NULL;
 }
 
 template<typename T>
@@ -62,7 +62,7 @@ myLinkedList<T>::~myLinkedList() {
 	}
 
 	head = nullptr;*/
-	MakeEmpty();
+	//MakeEmpty();
 }
 
 template<typename T>
@@ -85,7 +85,7 @@ int myLinkedList<T>::Add(T item) {
 	node<T>* temp = new node<T>;
 	temp->data = item;
 	temp->next = nullptr;
-	
+
 	if (head == nullptr) {
 		head = temp;
 		length++;

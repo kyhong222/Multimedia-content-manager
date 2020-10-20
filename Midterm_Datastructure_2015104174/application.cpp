@@ -75,14 +75,14 @@ void application::Run() {
 
 void application::AdvancedSearch() {
 	cout << "----------------------------------------" << endl;
-	cout << "Type  keywords to search(여러개를 검색할때는 스페이스바를 활용하십시오.) : ";
+	cout << "Type keywords to search(여러개를 검색할때는 스페이스바를 활용하십시오.) : ";
 	
 	string keywordString;
 	cin.ignore();
 	getline(cin, keywordString);	
 
 	// split keywords & add on keywordList
-	myLinkedList<string> keywordList;
+	mySortedLinkedList<string> keywordList;
 	istringstream ss(keywordString);
 	string stringBuffer;
 
@@ -90,10 +90,8 @@ void application::AdvancedSearch() {
 		keywordList.Add(stringBuffer);
 	}
 
-	myLinkedList<album> targetAlbumList;
+	mySortedLinkedList<album> targetAlbumList;
 	album iterator;
-
-	
 
 	// find on eventAlbumList
 	eventAlbumList.ResetList();
@@ -147,9 +145,15 @@ void application::AdvancedSearch() {
 
 	// make result list
 	mySortedLinkedList<string> resultList;
-	myLinkedList<string>* tempList;
-
+	mySortedLinkedList<string>* tempList;
+	
+	if (!targetAlbumList.GetLength()) {
+		cout << "----------------------------------------" << endl;
+		cout << "검색 결과가 없습니다." << endl;
+		return;
+	}
 	targetAlbumList.ResetList();
+	
 	targetAlbumList.GetNextItem(iterator);
 	tempList = iterator.GetContentList();
 	
@@ -219,7 +223,7 @@ int application::AddContent() {
 
 	// add on peopleAlbum
 	// people need to split
-	myLinkedList<string> peopleList;
+	mySortedLinkedList<string> peopleList;
 	istringstream ss(newContent.GetPeople());
 	string stringBuffer;
 
@@ -227,12 +231,14 @@ int application::AddContent() {
 		peopleList.Add(stringBuffer);
 	}
 
+	peopleList.ResetList();
 	for (int i = 0; i < peopleList.GetLength(); i++) {
+		string tempPeopleName;
+		peopleList.GetNextItem(tempPeopleName);
+
 		// set album name as peopleList's element
 		album tempPeopleAlbum;
-		string tempPeopleName;
-		peopleList.ResetList();
-		peopleList.GetNextItem(tempPeopleName);
+
 		tempPeopleAlbum.SetName(tempPeopleName);
 
 		if (peopleAlbumList.Get(tempPeopleAlbum)) {
@@ -337,7 +343,7 @@ int application::DeleteContent() {
 
 	// delete on peopleAlbumList;
 	// people list split
-	myLinkedList<string> peopleList;
+	mySortedLinkedList<string> peopleList;
 	istringstream ss(deleteContent.GetPeople());
 	string stringBuffer;
 
@@ -404,7 +410,7 @@ int application::ReplaceContent() {
 
 int application::RetriveContent() { 
 	cout << "----------------------------------------" << endl;
-	cout << "Type to retrive content : " << endl;
+	cout << "Type to retrive content : ";
 	string temp;
 	cin >> temp;
 	content retriveContent;
@@ -517,18 +523,18 @@ int application::ReadDataFromFile() {
 
 		// add on peopleAlbum
 		// people need to split
-		myLinkedList<string> peopleList;
+		mySortedLinkedList<string> peopleList;
 		istringstream ss(newContent.GetPeople());
 
 		while (getline(ss, stringBuffer, ' ')) {
 			peopleList.Add(stringBuffer);
 		}
 
+		peopleList.ResetList();
 		for (int i = 0; i < peopleList.GetLength(); i++) {
 			// set album name as peopleList's element
 			album tempPeopleAlbum;
 			string tempPeopleName;
-			peopleList.ResetList();
 			peopleList.GetNextItem(tempPeopleName);
 			tempPeopleAlbum.SetName(tempPeopleName);
 
@@ -613,7 +619,7 @@ int application::ReadDataFromFile() {
 int application::WriteDataToFile() {
 	string output;
 	ofstream out("masterList.txt");
-	if (out) {
+	if (!out) {
 		cout << "cannot open file" << endl;
 		return 0;
 	}

@@ -6,7 +6,7 @@ using namespace std;
 template<typename T>
 struct NodeType {
 	T data;
-	NodeType* next;
+	NodeType* next = NULL;
 };
 
 template<typename T>
@@ -24,7 +24,7 @@ public:
 	int Get(T& item);
 
 	void ResetList();
-	void GetNextItem(T& item);
+	int GetNextItem(T& item);
 
 private:
 	NodeType<T>* head;
@@ -41,7 +41,7 @@ mySortedLinkedList<T>::mySortedLinkedList() {
 
 template<typename T>
 mySortedLinkedList<T>::~mySortedLinkedList() {
-	NodeType<T>* temp;
+	/*NodeType<T>* temp;
 
 	while (head != nullptr) {
 		temp = head;
@@ -49,7 +49,7 @@ mySortedLinkedList<T>::~mySortedLinkedList() {
 		delete temp;
 	}
 
-	length = 0;
+	length = 0;*/
 }
 
 template<typename T>
@@ -220,13 +220,22 @@ void mySortedLinkedList<T>::ResetList() {
 }
 
 template<typename T>
-void mySortedLinkedList<T>::GetNextItem(T& item) {
+int mySortedLinkedList<T>::GetNextItem(T& item) {
+	if (!length)	return 0;
 	if (current == nullptr) {
 		current = head;
+		item = current->data;
+		return 1;
 	}
 	else {
+		if (current->next == nullptr) {
+			current = nullptr;
+			return 0;
+		}
 		current = current->next;
+		item = current->data;
+		return 1;
 	}
 
-	item = current->data;
+	
 }

@@ -8,7 +8,7 @@ using namespace std;
 // constructor
 album::album() {
 	name = "";
-	description = "";
+	description = "none";
 }
 
 // destructor
@@ -18,7 +18,9 @@ album::~album() {}
 void album::Print() {
 	cout << "----------------------------------------" << endl;
 	cout << "album name : " << name << endl;
-	cout << "album description : " << description << endl;
+	if (description != "none") {
+		cout << "album description : " << description << endl;
+	}	
 	cout << "album files : " << contentList.GetLength() << endl;
 }
 

@@ -3,7 +3,7 @@
 #include<string>
 
 #include"content.h"
-#include"myLinkedList.h"
+#include"mySortedLinkedList.h"
 #include"mySortedArrayList.h"
 
 using namespace std;
@@ -25,7 +25,7 @@ public:
 	void SetMasterListPorinter(mySortedArrayList<content>* masterListPointer) { this->masterList = masterListPointer; }
 
 	// general functions
-	myLinkedList<string>* GetContentList() { return &contentList; }
+	mySortedLinkedList<string>* GetContentList() { return &contentList; }
 
 	void Print();	// to print album's name, description, number of contents
 	void PrintContents();	// to print contents' detail
@@ -41,6 +41,6 @@ private:
 	string name;
 	string description;
 
-	myLinkedList<string> contentList;
+	mySortedLinkedList<string> contentList;
 	mySortedArrayList<content>* masterList;
 };
