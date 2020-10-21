@@ -55,6 +55,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="masterList.txt.txt" />
+    <Text Include="masterList.txt" />
   </ItemGroup>
 </Project>

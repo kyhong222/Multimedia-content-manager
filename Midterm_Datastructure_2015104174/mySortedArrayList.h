@@ -50,7 +50,7 @@ mySortedArrayList<T>::mySortedArrayList() {
 // destructor
 template<typename T>
 mySortedArrayList<T>::~mySortedArrayList() {
-	delete[] this->array;
+	//delete[] this->array;
 }
 
 template<typename T>
@@ -82,7 +82,7 @@ int mySortedArrayList<T>::Add(T item) {
 
 		T* temp = this->array;
 		array = newArray;
-		delete temp;
+		delete[] temp;
 	}
 
 	for (int i = 0; i < length; i++) {
@@ -156,11 +156,32 @@ int mySortedArrayList<T>::GetNextItem(T& item) {
 
 template<typename T>
 int mySortedArrayList<T>::Get(T& item) {
-	for (int i = 0; i < length; i++) {
+
+	int start = 0;
+	int end = length - 1;
+	int mid = 0;
+	while (start <= end) {
+		mid = (start + end) / 2;
+		if (array[mid] == item) {
+			item = array[mid];
+			return 1;
+		}
+		else {
+			if (array[mid] < item) {
+				start = mid + 1;
+			}
+			else {
+				end = mid - 1;
+			}
+		}
+	}
+	return 0;
+
+	/*for (int i = 0; i < length; i++) {
 		if (array[i] == item) {
 			item = array[i];
 			return 1;
 		}
 	}
-	return 0;
+	return 0;*/
 }

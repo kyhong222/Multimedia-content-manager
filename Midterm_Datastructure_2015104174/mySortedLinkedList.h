@@ -59,6 +59,9 @@ void mySortedLinkedList<T>::MakeEmpty() {
 	while (head != nullptr) {
 		temp = head;
 		head = head->next;
+
+		length--;
+
 		delete temp;
 	}
 
@@ -157,7 +160,7 @@ int mySortedLinkedList<T>::Delete(T item) {
 
 		// if not found
 		if (current == nullptr) {
-			cout << "there is no item like that." << endl;
+			//cout << "there is no item like that." << endl;
 			return 0;
 		}
 	}

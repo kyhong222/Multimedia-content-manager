@@ -20,7 +20,14 @@ void favorites::Print() {
 }
 
 void favorites::SetFavorites() {
-	mySortedArrayList<content> tempList = *masterList;
+	mySortedArrayList<content> tempList;
+	content dummy;
+	masterList->ResetList();
+	for (int i = 0; i < masterList->GetLength(); i++) {
+		masterList->GetNextItem(dummy);
+		tempList.Add(dummy);
+	}
+
 	for (int i = 0; i < 10; i++) {
 		int count = -1;
 		tempList.ResetList();

@@ -3,6 +3,7 @@
 #include<fstream>
 #include<string>
 #include<sstream>
+#include<ctime>
 
 #include"content.h"
 #include"favorites.h"
@@ -40,6 +41,8 @@ public:
 	// file input/output functions
 	int ReadDataFromFile();
 	int WriteDataToFile();
+
+	void createDataSet();
 
 private:
 	mySortedArrayList<content> masterList;

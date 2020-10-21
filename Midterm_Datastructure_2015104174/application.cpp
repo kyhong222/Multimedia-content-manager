@@ -1,5 +1,4 @@
 #pragma once
-
 #include "application.h"
 
 // constructor
@@ -26,6 +25,7 @@ void application::Run() {
 		cout << "8. Write data from file" << endl;
 		cout << "9. Search from keyword" << endl;
 		cout << "10. Show favorites" << endl;
+		//cout << "11. create dataSet(only for develop)" << endl;
 		cout << "0. exit" << endl;
 		cout << "----------------------------------------" << endl;
 		cout << "command --> ";
@@ -62,6 +62,9 @@ void application::Run() {
 		case 10:
 			favoriteList.SetFavorites();
 			favoriteList.Print();
+			break;
+		case 11:
+			//createDataSet();
 			break;
 		case 0:
 			return;
@@ -145,7 +148,7 @@ void application::AdvancedSearch() {
 
 	// make result list
 	mySortedLinkedList<string> resultList;
-	mySortedLinkedList<string>* tempList;
+	mySortedLinkedList<string> tempList;
 	
 	if (!targetAlbumList.GetLength()) {
 		cout << "----------------------------------------" << endl;
@@ -155,27 +158,65 @@ void application::AdvancedSearch() {
 	targetAlbumList.ResetList();
 	
 	targetAlbumList.GetNextItem(iterator);
-	tempList = iterator.GetContentList();
 	
-	tempList->ResetList();
-	for (int i = 0; i < tempList->GetLength(); i++) {
+	// tempList에 iterator의 list를 깊은복사
+	iterator.GetContentList()->ResetList();
+	for (int i = 0; i < iterator.GetContentList()->GetLength(); i++) {
+		string dummy;
+		iterator.GetContentList()->GetNextItem(dummy);
+		tempList.Add(dummy);
+	}
+	
+	//resultList = tempList;
+	tempList.ResetList();
+	for (int i = 0; i < tempList.GetLength(); i++) {
 		string stringIterator;
-		tempList->GetNextItem(stringIterator);
+		tempList.GetNextItem(stringIterator);
 		resultList.Add(stringIterator);
 	}
 
 	for (int i = 1; i < targetAlbumList.GetLength(); i++) {
 		targetAlbumList.GetNextItem(iterator);
-		tempList = iterator.GetContentList();
-
-		resultList.ResetList();
-		for (int j = 0; j < resultList.GetLength(); j++) {
-			string stringIterator;
-			resultList.GetNextItem(stringIterator);
-			if (!tempList->Get(stringIterator)) {
-				resultList.Delete(stringIterator);
+		resultList.MakeEmpty();
+		
+		// tempList와 iterator.getContentList의 교집합을 resultList에 추가
+		int p1 = 0, p2 = 0;
+		mySortedLinkedList<string> temp2List = *(iterator.GetContentList());
+		int temp1Length = tempList.GetLength();
+		int temp2Length = temp2List.GetLength();
+		tempList.ResetList();
+		temp2List.ResetList();
+		string item1, item2;
+		tempList.GetNextItem(item1);
+		temp2List.GetNextItem(item2);
+		while (p1 < temp1Length && p2 < temp2Length) {
+			if (item1 < item2) {
+				tempList.GetNextItem(item1);
+				p1++;
+			}
+			else if (item1 > item2) {
+				temp2List.GetNextItem(item2);
+				p2++;
+			}
+			else {
+				resultList.Add(item1);
+				tempList.GetNextItem(item1);
+				temp2List.GetNextItem(item2);
+				p1++;
+				p2++;
 			}
 		}
+
+		//tempList = resultList;
+		//resultList = tempList;
+		resultList.ResetList();
+		for (int i = 0; i < resultList.GetLength(); i++) {
+			string stringIterator;
+			resultList.GetNextItem(stringIterator);
+			tempList.Add(stringIterator);
+		}
+		
+		
 	}
 
 	cout << "----------------------------------------" << endl;
@@ -387,11 +428,10 @@ int application::DeleteContent() {
 		}
 	}
 
-	// TODO : favorite reset
-
 	// delete on masterList	
+	cout << deleteContent.GetFilename() << "has deleted." << endl;
 	masterList.Delete(deleteContent);
-
+	
 	return 1; 
 }
 
@@ -641,4 +681,297 @@ int application::WriteDataToFile() {
 
 	out.close();
 	return 1;
+}
+
+void application::createDataSet() {
+	/*
+		content
+			filename => img001, 002, 003 ...
+			description => all is none
+			event => izone's appearence
+			people	=> izone member
+			place	=> KBS, MBC, SBS, MNET
+			createdAt => izone's appearence
+
+			type => 70% photo 20% video 10% panorama
+			searchCount	=> 0~9999
+	*/
+
+	//srand(time(NULL));
+
+	string schedule[29] = {
+		"0220 FIESTA MNET",
+		"0221 FIESTA KBS",
+		"0222 FIESTA MBC",
+		"0223 FIESTA SBS",
+		"0225 FIESTA SBS",
+		"0226 FIESTA MBC",
+		"0227 FIESTA MNET",
+		"0301 FIESTA SBS",
+		"0303 FIESTA SBS",
+		"0304 FIESTA MBC",
+		"0305 FIESTA MNET",
+		"0307 FIESTA MBC",
+		"0308 FIESTA SBS",
+		"0618 환상동화 MNET",
+		"0619 환상동화 KBS",
+		"0620 환상동화 MBC",
+		"0621 환상동화 SBS",
+		"0623 환상동화 SBS",
+		"0624 환상동화 MBC",
+		"0625 환상동화 MNET",
+		"0626 환상동화 KBS",
+		"0627 환상동화 MBC",
+		"0628 환상동화 SBS",
+		"0630 환상동화 SBS",
+		"0701 환상동화 MBC",
+		"0702 환상동화 SBS",
+		"0703 환상동화 KBS",
+		"0704 환상동화 MBC",
+		"0705 환상동화 MNET"
+	};
+	string members[12] = {
+		"권은비",
+		"사쿠라",
+		"강혜원",
+		"최예나",
+		"이채연",
+		"김채원",
+		"김민주",
+		"나코",
+		"히토미",
+		"조유리",
+		"안유진",
+		"장원영"
+	};
+
+	int pictures[29];
+	for (int i = 0; i < 29; i++) {
+		pictures[i] = rand() % 30 + 1;
+	}
+
+	int peoplenumbers[5] = { 1,2,3,6,12 };
+
+
+	int makePicture = 0;
+	for (int i = 0; i < 29; i++) {
+		makePicture += pictures[i];
+	}
+	
+	int eventCounter = 0;
+	int pictureCounter = 0;
+
+	//makePicture = 50;
+
+	for (int i = 0; i < makePicture; i++) {
+		content newContent;
+		
+		// filename
+		string filename;
+		if (i == 1000) {
+			filename = "1000";
+		}
+		else if (i >= 99) {
+			// 0100~0999
+			filename = "0" + to_string(i + 1);
+		}
+		else if (i >= 9) {
+			filename = "00" + to_string(i + 1);
+		}
+		else {
+			filename = "000" + to_string(i+1);
+		}
+
+		filename = "img" + filename;
+
+		// description
+		string description = "none";
+
+		// split schedule
+		pictureCounter++;
+		if (pictureCounter > pictures[eventCounter]) {
+			eventCounter++;
+			pictureCounter = 0;
+		}
+	
+		string splitSchedule[3];
+		istringstream sstream(schedule[eventCounter]);
+		string stringBuffer;
+
+		for (int j = 0; j < 3; j++) {
+			getline(sstream, stringBuffer, ' ');
+			splitSchedule[j] = stringBuffer;
+		}
+		
+		// event
+		string eventName = splitSchedule[1];
+
+		// peoples
+		int numOfPeople = peoplenumbers[rand() % 5];
+		int* memIdx = new int[numOfPeople];
+		for (int j = 0; j < numOfPeople; j++) {
+			memIdx[j] = rand() % 12;
+			for (int k = 0; k < j; k++) {
+				if (memIdx[j] == memIdx[k]) {
+					j--;
+					break;
+				}
+			}
+		}
+
+		mySortedLinkedList<string> sortPeople;
+		for (int j = 0; j < numOfPeople; j++) {
+			sortPeople.Add(members[memIdx[j]]);
+		}
+
+
+		string people, peopleDummy;
+		sortPeople.ResetList();
+
+		sortPeople.GetNextItem(peopleDummy);
+		people = peopleDummy;
+		for (int j = 1; j < numOfPeople; j++) {
+			people += " ";
+			sortPeople.GetNextItem(peopleDummy);
+			people += peopleDummy;
+		}
+
+		// place
+		string place = splitSchedule[2];
+
+		// createdAt
+		string createdAt = "2020" + splitSchedule[0];
+		
+		//type
+		int typeP = rand() % 100;
+		int type;
+		if (typeP < 70) {
+			type = 1;
+		}
+		else if (typeP < 90) {
+			type = 2;
+		}
+		else {
+			type = 3;
+		}
+
+		// searchCount;
+		int searchCount = rand() % 10000;
+
+		newContent.SetContentAsParams(filename, description, eventName, people, place, createdAt, type, searchCount);
+
+		// add on masterList
+		if (!masterList.Add(newContent)) {
+			continue;
+		}
+
+		// add on eventAlbum
+		album tempEventAlbum;
+		tempEventAlbum.SetName(newContent.GetEvent());
+		if (eventAlbumList.Get(tempEventAlbum)) {
+			// 있는경우
+			tempEventAlbum.GetContentList()->Add(newContent.GetFilename());
+			eventAlbumList.Replace(tempEventAlbum);
+		}
+		else {
+			// 앨범이 없는경우
+			tempEventAlbum.SetMasterListPorinter(&masterList);
+			tempEventAlbum.GetContentList()->Add(newContent.GetFilename());
+			eventAlbumList.Add(tempEventAlbum);
+		}
+
+		// add on peopleAlbum
+		// people need to split
+		mySortedLinkedList<string> peopleList;
+		istringstream ss(newContent.GetPeople());
+
+		while (getline(ss, stringBuffer, ' ')) {
+			peopleList.Add(stringBuffer);
+		}
+
+		peopleList.ResetList();
+		for (int i = 0; i < peopleList.GetLength(); i++) {
+			string tempPeopleName;
+			peopleList.GetNextItem(tempPeopleName);
+
+			// set album name as peopleList's element
+			album tempPeopleAlbum;
+
+			tempPeopleAlbum.SetName(tempPeopleName);
+
+			if (peopleAlbumList.Get(tempPeopleAlbum)) {
+				// 있는경우
+				tempPeopleAlbum.GetContentList()->Add(newContent.GetFilename());
+				peopleAlbumList.Replace(tempPeopleAlbum);
+			}
+			else {
+				// 앨범이 없는경우
+				tempPeopleAlbum.SetMasterListPorinter(&masterList);
+				tempPeopleAlbum.GetContentList()->Add(newContent.GetFilename());
+				peopleAlbumList.Add(tempPeopleAlbum);
+			}
+		}
+
+		// add on placeAlbum
+		album tempPlaceAlbum;
+		tempPlaceAlbum.SetName(newContent.GetPlace());
+		if (placeAlbumList.Get(tempPlaceAlbum)) {
+			// 있는경우
+			tempPlaceAlbum.GetContentList()->Add(newContent.GetFilename());
+			placeAlbumList.Replace(tempPlaceAlbum);
+		}
+		else {
+			// 앨범이 없는경우
+			tempPlaceAlbum.SetMasterListPorinter(&masterList);
+			tempPlaceAlbum.GetContentList()->Add(newContent.GetFilename());
+			placeAlbumList.Add(tempPlaceAlbum);
+		}
+
+		// add on typeAlbum
+		album tempTypeAlbum;
+		string typeName;
+		switch (newContent.GetType())
+		{
+		case 1:
+			typeName = "Photo";
+			break;
+		case 2:
+			typeName = "Video";
+			break;
+		case 3:
+			typeName = "Panorama";
+			break;
+		default:
+			typeName = "Unknown";
+			break;
+		}
+		tempTypeAlbum.SetName(typeName);
+		if (typeAlbumList.Get(tempTypeAlbum)) {
+			// 있는경우
+			tempTypeAlbum.GetContentList()->Add(newContent.GetFilename());
+			typeAlbumList.Replace(tempTypeAlbum);
+		}
+		else {
+			// 앨범이 없는경우
+			tempTypeAlbum.SetMasterListPorinter(&masterList);
+			tempTypeAlbum.GetContentList()->Add(newContent.GetFilename());
+			typeAlbumList.Add(tempTypeAlbum);
+		}
+
+		// add on createdAtAlbum
+		album tempCreatedAtAlbum;
+		tempCreatedAtAlbum.SetName(newContent.GetCreatedAt());
+		if (createdAtAlbumList.Get(tempCreatedAtAlbum)) {
+			// 있는경우
+			tempCreatedAtAlbum.GetContentList()->Add(newContent.GetFilename());
+			createdAtAlbumList.Replace(tempCreatedAtAlbum);
+		}
+		else {
+			// 앨범이 없는경우
+			tempCreatedAtAlbum.SetMasterListPorinter(&masterList);
+			tempCreatedAtAlbum.GetContentList()->Add(newContent.GetFilename());
+			createdAtAlbumList.Add(tempCreatedAtAlbum);
+		}
+	}
+
 }
