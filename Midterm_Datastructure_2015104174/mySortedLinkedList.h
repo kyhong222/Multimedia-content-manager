@@ -41,27 +41,17 @@ mySortedLinkedList<T>::mySortedLinkedList() {
 
 template<typename T>
 mySortedLinkedList<T>::~mySortedLinkedList() {
-	/*NodeType<T>* temp;
-
-	while (head != nullptr) {
-		temp = head;
-		head = head->next;
-		delete temp;
-	}
-
-	length = 0;*/
+	MakeEmpty();
 }
 
 template<typename T>
 void mySortedLinkedList<T>::MakeEmpty() {
 	NodeType<T>* temp;
 
-	while (head != nullptr) {
+	for (int i = 0; i < length; i++) {
 		temp = head;
 		head = head->next;
-
-		length--;
-
+		temp->next = NULL;
 		delete temp;
 	}
 

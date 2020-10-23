@@ -19,18 +19,16 @@ public:
 	// getters
 	string GetName() { return name; }
 	string GetDescription() { return description; }
+	mySortedLinkedList<string>* GetContentList() { return &contentList; }
 
 	// setters
 	void SetName(string name) { this->name = name; }
 	void SetMasterListPorinter(mySortedArrayList<content>* masterListPointer) { this->masterList = masterListPointer; }
+	void SetAlbumFromKB();
 
 	// general functions
-	mySortedLinkedList<string>* GetContentList() { return &contentList; }
-
 	void Print();	// to print album's name, description, number of contents
 	void PrintContents();	// to print contents' detail
-	void SetAlbumFromKB();
-	//void SetAlbum(album item);
 
 	// operator overloading functions to use data structure
 	bool operator > (const album& data);

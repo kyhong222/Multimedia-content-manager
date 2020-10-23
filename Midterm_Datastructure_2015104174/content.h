@@ -19,12 +19,10 @@ public:
 	string GetPeople() { return people; }
 	string GetPlace() { return place; }
 	string GetCreatedAt() { return createdAt; }
-
 	int GetType() { return type; }
 	int GetSearchCount() { return searchCount; }
 
 	void SetFilename(string filename) { this->filename = filename; }
-	
 	void SetContentAsParams(string fn, string dsc, string evt, string pp, string pl, string crt, int ty, int sc) {
 		filename = fn;
 		description = dsc;
@@ -35,12 +33,11 @@ public:
 		type = ty;
 		searchCount = sc;
 	}
-
+	void SetContentFromKB();
+	void SetContent(content item);
 
 	// general functions
 	void Print();
-	void SetContentFromKB();
-	void SetContent(content item);
 	void IncreaseSearchCount();
 
 	// operator overloading functions to use data structure

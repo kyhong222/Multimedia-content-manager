@@ -20,6 +20,7 @@ void favorites::Print() {
 }
 
 void favorites::SetFavorites() {
+	// masterList의 값을 그대로 복사해오는 tempList를 만든다.
 	mySortedArrayList<content> tempList;
 	content dummy;
 	masterList->ResetList();
@@ -28,11 +29,14 @@ void favorites::SetFavorites() {
 		tempList.Add(dummy);
 	}
 
+	// 제일 searchCount가 큰값을 찾고, contentList에 넣어준뒤, 해당컨텐츠를 tempList에서 삭제한다.
+	// 해당 로직을 10회 반복한다.
 	for (int i = 0; i < 10; i++) {
 		int count = -1;
 		tempList.ResetList();
 		content maxContent;
 		content iterator;
+		// tempList에서 제일 큰것 찾기
 		for (int j = 0; j < tempList.GetLength(); j++) {
 			tempList.GetNextItem(iterator);
 			if (iterator.GetSearchCount() > count) {
@@ -40,23 +44,11 @@ void favorites::SetFavorites() {
 				count = iterator.GetSearchCount();
 			}
 		}
+		// 제일 큰값을 넣어준뒤
 		contentList[i] = maxContent;
+
+		// tempList에서 삭제한다.
 		tempList.Delete(maxContent);
 	}
 
 }
-
-//void favorites::UpdateFavorites(content data) {
-//	for (int i = 0; i < 10; i++) {
-//		content temp;
-//		temp.SetFilename(contentList[i]);
-//		masterList->Get(temp);
-//		if (temp.GetSearchCount() < data.GetSearchCount()) {
-//			for (int j = 8; j >= i; j--) {
-//				contentList[j+1] = contentList[j];
-//			}
-//			contentList[i] = data.GetFilename();
-//			return;
-//		}
-//	}
-//}

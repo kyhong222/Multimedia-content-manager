@@ -63,9 +63,9 @@ void application::Run() {
 			favoriteList.SetFavorites();
 			favoriteList.Print();
 			break;
-		case 11:
-			//createDataSet();
-			break;
+		/*case 11:
+			createDataSet();
+			break;*/
 		case 0:
 			return;
 		default:
@@ -80,6 +80,7 @@ void application::AdvancedSearch() {
 	cout << "----------------------------------------" << endl;
 	cout << "Type keywords to search(여러개를 검색할때는 스페이스바를 활용하십시오.) : ";
 	
+	// 키워드를 입력받음
 	string keywordString;
 	cin.ignore();
 	getline(cin, keywordString);	
@@ -93,8 +94,9 @@ void application::AdvancedSearch() {
 		keywordList.Add(stringBuffer);
 	}
 
+	// 관련 앨범을 담을 targetAlbumList 선언
 	mySortedLinkedList<album> targetAlbumList;
-	album iterator;
+	album iterator;	// 앨범의 이터레이터(더미 역할)
 
 	// find on eventAlbumList
 	eventAlbumList.ResetList();
@@ -150,15 +152,19 @@ void application::AdvancedSearch() {
 	mySortedLinkedList<string> resultList;
 	mySortedLinkedList<string> tempList;
 	
+	// 일치 앨범이 없는 경우 예외처리
 	if (!targetAlbumList.GetLength()) {
 		cout << "----------------------------------------" << endl;
 		cout << "검색 결과가 없습니다." << endl;
 		return;
 	}
+
+	// 앨범 리스트에서 순차적으로 돌며 리스트 생성 시작
 	targetAlbumList.ResetList();
 	
 	targetAlbumList.GetNextItem(iterator);
 	
+	// 첫 연관 앨범을 resultList에 복사하고, 그 다음부터는 교집합을 구한다.
 	// tempList에 iterator의 list를 깊은복사
 	iterator.GetContentList()->ResetList();
 	for (int i = 0; i < iterator.GetContentList()->GetLength(); i++) {
@@ -167,7 +173,7 @@ void application::AdvancedSearch() {
 		tempList.Add(dummy);
 	}
 	
-	//resultList = tempList;
+	// resultList에 tempList 복사.
 	tempList.ResetList();
 	for (int i = 0; i < tempList.GetLength(); i++) {
 		string stringIterator;
@@ -175,6 +181,7 @@ void application::AdvancedSearch() {
 		resultList.Add(stringIterator);
 	}
 
+	// 그 다음 앨범부터는 교집합을 구함.
 	for (int i = 1; i < targetAlbumList.GetLength(); i++) {
 		targetAlbumList.GetNextItem(iterator);
 		resultList.MakeEmpty();
@@ -207,8 +214,7 @@ void application::AdvancedSearch() {
 			}
 		}
 
-		//tempList = resultList;
-		//resultList = tempList;
+		// result엘범에 교집합 결과를 다시 담아줌
 		resultList.ResetList();
 		for (int i = 0; i < resultList.GetLength(); i++) {
 			string stringIterator;
@@ -219,6 +225,7 @@ void application::AdvancedSearch() {
 		
 	}
 
+	// 검색결과 출력부
 	cout << "----------------------------------------" << endl;
 	cout << "검색 결과" << endl;
 
@@ -237,7 +244,6 @@ void application::AdvancedSearch() {
 	cout << "총 " << resultList.GetLength() << "건의 검색 결과를 발견했습니다." << endl;
 }
 
-// crud functions
 int application::AddContent() {
 	content newContent;
 	newContent.SetContentFromKB();
@@ -360,11 +366,13 @@ int application::AddContent() {
 }
 
 int application::DeleteContent() {
+	// 지울 컨텐츠를 입력받음
 	content deleteContent;
 	string deleteFilename;
 	cout << "Type filename to delete : ";
 	cin >> deleteFilename;
 
+	// 지우려는 컨텐츠가 없을시 예외처리
 	deleteContent.SetFilename(deleteFilename);
 	if (!masterList.Get(deleteContent)) {
 		cout << "There is no item to delete" << endl;
@@ -436,11 +444,13 @@ int application::DeleteContent() {
 }
 
 int application::ReplaceContent() { 
+	// 대체할 컨텐츠를 입력받음
 	cout << "----------------------------------------" << endl;
 	cout << "Type to change file name & properties" << endl;
 	content replaceContent;
 	replaceContent.SetContentFromKB();
 	
+	// 대체할 원본 컨텐츠 없을때 예외처리 및 replace 수행
 	if (!masterList.Replace(replaceContent)) {
 		cout << "There is no item to replace" << endl;
 		return 0;
@@ -449,6 +459,7 @@ int application::ReplaceContent() {
 }
 
 int application::RetriveContent() { 
+	// 검색할 컨텐츠 입력받기
 	cout << "----------------------------------------" << endl;
 	cout << "Type to retrive content : ";
 	string temp;
@@ -456,6 +467,7 @@ int application::RetriveContent() {
 	content retriveContent;
 	retriveContent.SetFilename(temp);
 
+	// 있으면 출력, 없으면 예외처리
 	if (!masterList.Get(retriveContent)) {
 		cout << "There is no item to retrive" << endl;
 		return 0;

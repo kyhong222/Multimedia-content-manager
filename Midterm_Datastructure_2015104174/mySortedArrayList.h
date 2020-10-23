@@ -50,7 +50,7 @@ mySortedArrayList<T>::mySortedArrayList() {
 // destructor
 template<typename T>
 mySortedArrayList<T>::~mySortedArrayList() {
-	//delete[] this->array;
+	delete[] array;
 }
 
 template<typename T>

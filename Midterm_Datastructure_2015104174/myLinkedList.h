@@ -47,29 +47,14 @@ myLinkedList<T>::myLinkedList() {
 
 template<typename T>
 myLinkedList<T>::~myLinkedList() {
-	/*node<T>* temp;
-
-	while (head != nullptr) {
-		temp = head;
-		head = head->next;
-		delete temp;
-	}*/
-	/*node<T> *n = this->head, *current = nullptr;
-	while (n) {
-		current = n;
-		n = n->next;
-		delete(current);
-	}
-
-	head = nullptr;*/
-	//MakeEmpty();
+	MakeEmpty();
 }
 
 template<typename T>
 void myLinkedList<T>::MakeEmpty() {
 	node<T>* temp;
 
-	while (head != nullptr){
+	for(int i=0; i<length; i++){
 		temp = head;
 		head = head->next;
 		delete temp;
