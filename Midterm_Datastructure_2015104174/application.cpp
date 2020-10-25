@@ -188,7 +188,9 @@ void application::AdvancedSearch() {
 		
 		// tempList와 iterator.getContentList의 교집합을 resultList에 추가
 		int p1 = 0, p2 = 0;
-		mySortedLinkedList<string> temp2List = *(iterator.GetContentList());
+		//mySortedLinkedList<string> temp2List = *(iterator.GetContentList());
+		mySortedLinkedList<string> temp2List;
+		temp2List = *(iterator.GetContentList());
 		int temp1Length = tempList.GetLength();
 		int temp2Length = temp2List.GetLength();
 		tempList.ResetList();
@@ -572,7 +574,7 @@ int application::ReadDataFromFile() {
 		if (!masterList.Add(newContent)) {
 			return 0;
 		}
-		/*newContent.Print();*/
+		//newContent.Print();
 
 
 		// add on eventAlbum
