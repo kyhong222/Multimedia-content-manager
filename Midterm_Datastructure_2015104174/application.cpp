@@ -255,6 +255,9 @@ int application::AddContent() {
 		return 0;
 	}
 
+	insertOnAlbums(newContent);
+
+	/*
 	// add on eventAlbum
 	album tempEventAlbum;
 	tempEventAlbum.SetName(newContent.GetEvent());
@@ -363,7 +366,7 @@ int application::AddContent() {
 		tempCreatedAtAlbum.GetContentList()->Add(newContent.GetFilename());
 		createdAtAlbumList.Add(tempCreatedAtAlbum);
 	}
-	
+	*/
 	return 1;
 }
 
@@ -574,114 +577,116 @@ int application::ReadDataFromFile() {
 		if (!masterList.Add(newContent)) {
 			return 0;
 		}
-		//newContent.Print();
+		newContent.Print();
+
+		insertOnAlbums(newContent);
 
 
-		// add on eventAlbum
-		album tempEventAlbum;
-		tempEventAlbum.SetName(newContent.GetEvent());
-		if (eventAlbumList.Get(tempEventAlbum)) {
-			// 있는경우
-			tempEventAlbum.GetContentList()->Add(newContent.GetFilename());
-			eventAlbumList.Replace(tempEventAlbum);
-		}
-		else {
-			// 앨범이 없는경우
-			tempEventAlbum.SetMasterListPorinter(&masterList);
-			tempEventAlbum.GetContentList()->Add(newContent.GetFilename());
-			eventAlbumList.Add(tempEventAlbum);
-		}
+		//// add on eventAlbum
+		//album tempEventAlbum;
+		//tempEventAlbum.SetName(newContent.GetEvent());
+		//if (eventAlbumList.Get(tempEventAlbum)) {
+		//	// 있는경우
+		//	tempEventAlbum.GetContentList()->Add(newContent.GetFilename());
+		//	eventAlbumList.Replace(tempEventAlbum);
+		//}
+		//else {
+		//	// 앨범이 없는경우
+		//	tempEventAlbum.SetMasterListPorinter(&masterList);
+		//	tempEventAlbum.GetContentList()->Add(newContent.GetFilename());
+		//	eventAlbumList.Add(tempEventAlbum);
+		//}
 
-		// add on peopleAlbum
-		// people need to split
-		mySortedLinkedList<string> peopleList;
-		istringstream ss(newContent.GetPeople());
+		//// add on peopleAlbum
+		//// people need to split
+		//mySortedLinkedList<string> peopleList;
+		//istringstream ss(newContent.GetPeople());
 
-		while (getline(ss, stringBuffer, ' ')) {
-			peopleList.Add(stringBuffer);
-		}
+		//while (getline(ss, stringBuffer, ' ')) {
+		//	peopleList.Add(stringBuffer);
+		//}
 
-		peopleList.ResetList();
-		for (int i = 0; i < peopleList.GetLength(); i++) {
-			// set album name as peopleList's element
-			album tempPeopleAlbum;
-			string tempPeopleName;
-			peopleList.GetNextItem(tempPeopleName);
-			tempPeopleAlbum.SetName(tempPeopleName);
+		//peopleList.ResetList();
+		//for (int i = 0; i < peopleList.GetLength(); i++) {
+		//	// set album name as peopleList's element
+		//	album tempPeopleAlbum;
+		//	string tempPeopleName;
+		//	peopleList.GetNextItem(tempPeopleName);
+		//	tempPeopleAlbum.SetName(tempPeopleName);
 
-			if (peopleAlbumList.Get(tempPeopleAlbum)) {
-				// 있는경우
-				tempPeopleAlbum.GetContentList()->Add(newContent.GetFilename());
-				peopleAlbumList.Replace(tempPeopleAlbum);
-			}
-			else {
-				// 앨범이 없는경우
-				tempPeopleAlbum.SetMasterListPorinter(&masterList);
-				tempPeopleAlbum.GetContentList()->Add(newContent.GetFilename());
-				peopleAlbumList.Add(tempPeopleAlbum);
-			}
-		}
+		//	if (peopleAlbumList.Get(tempPeopleAlbum)) {
+		//		// 있는경우
+		//		tempPeopleAlbum.GetContentList()->Add(newContent.GetFilename());
+		//		peopleAlbumList.Replace(tempPeopleAlbum);
+		//	}
+		//	else {
+		//		// 앨범이 없는경우
+		//		tempPeopleAlbum.SetMasterListPorinter(&masterList);
+		//		tempPeopleAlbum.GetContentList()->Add(newContent.GetFilename());
+		//		peopleAlbumList.Add(tempPeopleAlbum);
+		//	}
+		//}
 
-		// add on placeAlbum
-		album tempPlaceAlbum;
-		tempPlaceAlbum.SetName(newContent.GetPlace());
-		if (placeAlbumList.Get(tempPlaceAlbum)) {
-			// 있는경우
-			tempPlaceAlbum.GetContentList()->Add(newContent.GetFilename());
-			placeAlbumList.Replace(tempPlaceAlbum);
-		}
-		else {
-			// 앨범이 없는경우
-			tempPlaceAlbum.SetMasterListPorinter(&masterList);
-			tempPlaceAlbum.GetContentList()->Add(newContent.GetFilename());
-			placeAlbumList.Add(tempPlaceAlbum);
-		}
+		//// add on placeAlbum
+		//album tempPlaceAlbum;
+		//tempPlaceAlbum.SetName(newContent.GetPlace());
+		//if (placeAlbumList.Get(tempPlaceAlbum)) {
+		//	// 있는경우
+		//	tempPlaceAlbum.GetContentList()->Add(newContent.GetFilename());
+		//	placeAlbumList.Replace(tempPlaceAlbum);
+		//}
+		//else {
+		//	// 앨범이 없는경우
+		//	tempPlaceAlbum.SetMasterListPorinter(&masterList);
+		//	tempPlaceAlbum.GetContentList()->Add(newContent.GetFilename());
+		//	placeAlbumList.Add(tempPlaceAlbum);
+		//}
 
-		// add on typeAlbum
-		album tempTypeAlbum;
-		string typeName;
-		switch (newContent.GetType())
-		{
-		case 1:
-			typeName = "Photo";
-			break;
-		case 2:
-			typeName = "Video";
-			break;
-		case 3:
-			typeName = "Panorama";
-			break;
-		default:
-			typeName = "Unknown";
-			break;
-		}
-		tempTypeAlbum.SetName(typeName);
-		if (typeAlbumList.Get(tempTypeAlbum)) {
-			// 있는경우
-			tempTypeAlbum.GetContentList()->Add(newContent.GetFilename());
-			typeAlbumList.Replace(tempTypeAlbum);
-		}
-		else {
-			// 앨범이 없는경우
-			tempTypeAlbum.SetMasterListPorinter(&masterList);
-			tempTypeAlbum.GetContentList()->Add(newContent.GetFilename());
-			typeAlbumList.Add(tempTypeAlbum);
-		}
+		//// add on typeAlbum
+		//album tempTypeAlbum;
+		//string typeName;
+		//switch (newContent.GetType())
+		//{
+		//case 1:
+		//	typeName = "Photo";
+		//	break;
+		//case 2:
+		//	typeName = "Video";
+		//	break;
+		//case 3:
+		//	typeName = "Panorama";
+		//	break;
+		//default:
+		//	typeName = "Unknown";
+		//	break;
+		//}
+		//tempTypeAlbum.SetName(typeName);
+		//if (typeAlbumList.Get(tempTypeAlbum)) {
+		//	// 있는경우
+		//	tempTypeAlbum.GetContentList()->Add(newContent.GetFilename());
+		//	typeAlbumList.Replace(tempTypeAlbum);
+		//}
+		//else {
+		//	// 앨범이 없는경우
+		//	tempTypeAlbum.SetMasterListPorinter(&masterList);
+		//	tempTypeAlbum.GetContentList()->Add(newContent.GetFilename());
+		//	typeAlbumList.Add(tempTypeAlbum);
+		//}
 
-		// add on createdAtAlbum
-		album tempCreatedAtAlbum;
-		tempCreatedAtAlbum.SetName(newContent.GetCreatedAt());
-		if (createdAtAlbumList.Get(tempCreatedAtAlbum)) {
-			// 있는경우
-			tempCreatedAtAlbum.GetContentList()->Add(newContent.GetFilename());
-			createdAtAlbumList.Replace(tempCreatedAtAlbum);
-		}
-		else {
-			// 앨범이 없는경우
-			tempCreatedAtAlbum.SetMasterListPorinter(&masterList);
-			tempCreatedAtAlbum.GetContentList()->Add(newContent.GetFilename());
-			createdAtAlbumList.Add(tempCreatedAtAlbum);
-		}
+		//// add on createdAtAlbum
+		//album tempCreatedAtAlbum;
+		//tempCreatedAtAlbum.SetName(newContent.GetCreatedAt());
+		//if (createdAtAlbumList.Get(tempCreatedAtAlbum)) {
+		//	// 있는경우
+		//	tempCreatedAtAlbum.GetContentList()->Add(newContent.GetFilename());
+		//	createdAtAlbumList.Replace(tempCreatedAtAlbum);
+		//}
+		//else {
+		//	// 앨범이 없는경우
+		//	tempCreatedAtAlbum.SetMasterListPorinter(&masterList);
+		//	tempCreatedAtAlbum.GetContentList()->Add(newContent.GetFilename());
+		//	createdAtAlbumList.Add(tempCreatedAtAlbum);
+		//}
 
 	}
 	in.close();
@@ -711,6 +716,111 @@ int application::WriteDataToFile() {
 	}
 
 	out.close();
+	return 1;
+}
+
+int application::insertOnAlbums(content newContent) {
+
+	album albumIt;
+	bool found = false;
+
+	// event
+	eventAlbumList.ResetList();
+	for (int i = 0; i < eventAlbumList.GetLength(); i++) {
+		eventAlbumList.GetNextItem(albumIt);
+		if (albumIt.GetName() == newContent.GetEvent()) {
+			albumIt.GetContentList()->Add(newContent.GetFilename());
+			eventAlbumList.Replace(albumIt);
+			found = true;
+			break;
+		}
+	}
+	if (!found) {
+		albumIt.SetName(newContent.GetEvent());
+		albumIt.SetDescription("none");
+		albumIt.SetMasterListPorinter(&masterList);
+		albumIt.GetContentList()->MakeEmpty();
+		albumIt.GetContentList()->Add(newContent.GetFilename());
+		eventAlbumList.Add(albumIt);
+	}
+
+	// reset flag
+	found = false;	
+
+	// people
+	// people string split
+	mySortedLinkedList<string> peopleList;
+	istringstream ss(newContent.GetPeople());
+	string stringBuffer;
+	while (getline(ss, stringBuffer, ' ')) {
+		peopleList.Add(stringBuffer);
+	}
+
+	peopleList.ResetList();
+	string peopleDummy;
+	for (int i = 0; i < peopleList.GetLength(); i++) {
+		peopleList.GetNextItem(peopleDummy);
+		peopleAlbumList.ResetList();
+		
+		for (int j = 0; j < peopleAlbumList.GetLength(); j++) {
+			peopleAlbumList.GetNextItem(albumIt);
+			if (albumIt.GetName() == peopleDummy) {
+				albumIt.GetContentList()->Add(newContent.GetFilename());
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			albumIt.SetName(peopleDummy);
+			albumIt.SetDescription("none");
+			albumIt.SetMasterListPorinter(&masterList);
+			albumIt.GetContentList()->MakeEmpty();
+			albumIt.GetContentList()->Add(newContent.GetFilename());
+			peopleAlbumList.Add(albumIt);
+		}
+
+		// reset flag
+		found = false;
+	}
+	
+	
+
+	//// add on peopleAlbum
+		//// people need to split
+		//mySortedLinkedList<string> peopleList;
+		//istringstream ss(newContent.GetPeople());
+
+		//while (getline(ss, stringBuffer, ' ')) {
+		//	peopleList.Add(stringBuffer);
+		//}
+
+		//peopleList.ResetList();
+		//for (int i = 0; i < peopleList.GetLength(); i++) {
+		//	// set album name as peopleList's element
+		//	album tempPeopleAlbum;
+		//	string tempPeopleName;
+		//	peopleList.GetNextItem(tempPeopleName);
+		//	tempPeopleAlbum.SetName(tempPeopleName);
+
+		//	if (peopleAlbumList.Get(tempPeopleAlbum)) {
+		//		// 있는경우
+		//		tempPeopleAlbum.GetContentList()->Add(newContent.GetFilename());
+		//		peopleAlbumList.Replace(tempPeopleAlbum);
+		//	}
+		//	else {
+		//		// 앨범이 없는경우
+		//		tempPeopleAlbum.SetMasterListPorinter(&masterList);
+		//		tempPeopleAlbum.GetContentList()->Add(newContent.GetFilename());
+		//		peopleAlbumList.Add(tempPeopleAlbum);
+		//	}
+		//}
+
+	// place
+
+	// type
+
+	// createdAt
+
 	return 1;
 }
 

@@ -86,10 +86,18 @@ public:
 	int WriteDataToFile();
 
 	/*
+	@brief 컨텐츠의 정보로 album에 넣음
+	@post 앨범에 컨텐츠가 세팅됨
+	*/
+	int insertOnAlbums(content newContent);
+	
+	/*
 	@brief 개발용 데이터셋 생성 함수
 	@post 랜덤변수에 의해 적절한 양의 데이터가 생성됨
 	*/
 	void createDataSet();
+
+
 
 private:
 	mySortedArrayList<content> masterList;			// 컨텐츠리스트
