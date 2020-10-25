@@ -10,6 +10,9 @@ public:
 	// constructor
 	mySortedArrayList();
 
+	// copy constructor
+	mySortedArrayList(mySortedArrayList<T>& copyList);
+
 	// destructor
 	~mySortedArrayList();
 
@@ -31,6 +34,8 @@ public:
 
 	int Get(T& item);
 	
+	// operator overloading
+	mySortedArrayList<T> operator =(mySortedArrayList<T>& copyItem);
 private:
 	int length;
 	int maxSize;
@@ -46,6 +51,17 @@ mySortedArrayList<T>::mySortedArrayList() {
 	current = -1;
 	array = new T[maxSize];
 }
+
+template<typename T>
+mySortedArrayList<T>::mySortedArrayList(mySortedArrayList<T>& copyList) {
+	this->ResetList();
+	T dummy;
+	for (int i = 0; i < this->GetLength(); i++) {
+		GetNextItem(dummy);
+		copyList.Add(dummy);
+	}
+}
+
 
 // destructor
 template<typename T>
@@ -184,4 +200,16 @@ int mySortedArrayList<T>::Get(T& item) {
 		}
 	}
 	return 0;*/
+}
+
+template<typename T>
+mySortedArrayList<T> mySortedArrayList<T>::operator =(mySortedArrayList<T>& copyItem){
+	copyItem.resetList();
+	T dummy;
+	for (int i = 0; i < copyItem.length; i++) {
+		copyItem.GetNextItem(dummy);
+		this->Add(dummy);
+	}
+
+	return *this;
 }

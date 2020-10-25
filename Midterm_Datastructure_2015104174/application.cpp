@@ -386,6 +386,7 @@ int application::DeleteContent() {
 	for (int i = 0; i < eventAlbumList.GetLength(); i++) {
 		eventAlbumList.GetNextItem(iterator);
 		if (iterator.GetContentList()->Delete(deleteContent.GetFilename())) {
+			eventAlbumList.Replace(iterator);
 			break;
 		}
 	}
@@ -412,6 +413,7 @@ int application::DeleteContent() {
 		for (int j = 0; j < peopleAlbumList.GetLength(); j++) {
 			peopleAlbumList.GetNextItem(iterator);
 			if (iterator.GetContentList()->Delete(deleteContent.GetFilename())) {
+				peopleAlbumList.Replace(iterator);
 				break;
 			}
 		}
@@ -422,6 +424,7 @@ int application::DeleteContent() {
 	for (int i = 0; i < placeAlbumList.GetLength(); i++) {
 		placeAlbumList.GetNextItem(iterator);
 		if (iterator.GetContentList()->Delete(deleteContent.GetFilename())) {
+			placeAlbumList.Replace(iterator);
 			break;
 		}
 	}
@@ -432,12 +435,24 @@ int application::DeleteContent() {
 	for (int i = 0; i < typeAlbumList.GetLength(); i++) {
 		typeAlbumList.GetNextItem(iterator);
 		if (iterator.GetContentList()->Delete(deleteContent.GetFilename())) {
+			typeAlbumList.Replace(iterator);
+			break;
+		}
+	}
+
+	// delete on createdAtAlbumList;
+	createdAtAlbumList.ResetList();
+
+	for (int i = 0; i < createdAtAlbumList.GetLength(); i++) {
+		createdAtAlbumList.GetNextItem(iterator);
+		if (iterator.GetContentList()->Delete(deleteContent.GetFilename())) {
+			createdAtAlbumList.Replace(iterator);
 			break;
 		}
 	}
 
 	// delete on masterList	
-	cout << deleteContent.GetFilename() << "has deleted." << endl;
+	cout << endl << deleteContent.GetFilename() << " has deleted." << endl;
 	masterList.Delete(deleteContent);
 	
 	return 1; 
@@ -557,6 +572,8 @@ int application::ReadDataFromFile() {
 		if (!masterList.Add(newContent)) {
 			return 0;
 		}
+		/*newContent.Print();*/
+
 
 		// add on eventAlbum
 		album tempEventAlbum;

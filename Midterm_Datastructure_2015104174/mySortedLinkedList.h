@@ -12,7 +12,13 @@ struct NodeType {
 template<typename T>
 class mySortedLinkedList {
 public:
+	// constructor
+	mySortedLinkedList(mySortedLinkedList<T> &copyList);
+
+	// copy constructor
 	mySortedLinkedList();
+
+	// destructor
 	~mySortedLinkedList();
 
 	void MakeEmpty();
@@ -26,6 +32,8 @@ public:
 	void ResetList();
 	int GetNextItem(T& item);
 
+	mySortedLinkedList<T> operator=(mySortedLinkedList<T>& copyList);
+
 private:
 	NodeType<T>* head;
 	NodeType<T>* current;
@@ -37,6 +45,17 @@ mySortedLinkedList<T>::mySortedLinkedList() {
 	head = nullptr;
 	current = nullptr;
 	length = 0;
+}
+
+template<typename T>
+mySortedLinkedList<T>::mySortedLinkedList(mySortedLinkedList<T>& copyList) {
+	this->ResetList();
+	T dummy;
+
+	for (int i = 0; i < this->GetLength(); i++) {
+		this->GetNextItem(dummy);
+		copyList.Add(dummy);
+	}
 }
 
 template<typename T>
@@ -145,6 +164,7 @@ int mySortedLinkedList<T>::Delete(T item) {
 
 			// delete current
 			delete current;
+			length--;
 			return 1;
 		}
 
@@ -230,5 +250,18 @@ int mySortedLinkedList<T>::GetNextItem(T& item) {
 		return 1;
 	}
 
+}
+
+template<typename T>
+mySortedLinkedList<T> mySortedLinkedList<T>::operator=(mySortedLinkedList<T>& copyList) {
+	copyList.ResetList();
+	T dummy;
+	for (int i = 0; i < copyList.GetLength(); i++) {
+		copyList.GetNextItem(dummy);
+		this->Add(dummy);
+	}
+
+	this->length = copyList.GetLength();
+	return *this;
 	
 }

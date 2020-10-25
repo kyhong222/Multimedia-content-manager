@@ -16,6 +16,9 @@ album::~album() {}
 
 // to print album's name, description, number of contents
 void album::Print() {
+	if (!contentList.GetLength()) {
+		return;
+	}
 	cout << "----------------------------------------" << endl;
 	cout << "album name : " << name << endl;
 	if (description != "none") {
@@ -66,4 +69,13 @@ bool album::operator > (const album& data) {
 bool album::operator == (const album& data) {
 	if (this->name == data.name)	return true;
 	return false;
+}
+
+album album::operator=(album& copyAlbum) {
+	this->name = copyAlbum.GetName();
+	this->description = copyAlbum.GetDescription();
+	this->contentList = copyAlbum.contentList;
+	this->masterList = copyAlbum.masterList;
+
+	return *this;
 }

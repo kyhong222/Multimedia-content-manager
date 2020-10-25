@@ -13,6 +13,21 @@ public:
 	// constructor
 	album();
 
+	// copy constructor
+	album(album& copyAlbum) {
+
+		this->name = copyAlbum.GetName();
+		this->description = copyAlbum.GetDescription();
+		this->contentList = copyAlbum.contentList;
+		this->masterList = copyAlbum.masterList;
+
+
+		/*copyAlbum.SetName(this->name);
+		copyAlbum.SetDescription(this->description);
+		copyAlbum.contentList = this->contentList;
+		copyAlbum.SetMasterListPorinter(this->masterList);*/
+	}
+
 	// destructor
 	~album();
 
@@ -23,6 +38,7 @@ public:
 
 	// setters
 	void SetName(string name) { this->name = name; }
+	void SetDescription(string desc) { this->description = desc; }
 	void SetMasterListPorinter(mySortedArrayList<content>* masterListPointer) { this->masterList = masterListPointer; }
 	void SetAlbumFromKB();
 
@@ -34,6 +50,7 @@ public:
 	bool operator > (const album& data);
 	bool operator == (const album& data);
 
+	album operator=(album& copyAlbum);
 
 private:
 	string name;
